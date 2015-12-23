@@ -34,6 +34,7 @@ public class Audio {
 	//------------------------------------------------------
 	private int buffer,source;
 	private String fileName;
+	private String format;
 	//------------------------------------------------------
 
 	//Fonction global
@@ -76,11 +77,28 @@ public class Audio {
 	private void setSound() throws Exception{
 		if(fileName.endsWith(".ogg")){
 			loadOGGFormat();
+			format = "OGG";
+		}else if(fileName.endsWith(".wav")){
+			loadWavFormat();
+			format = "WAV";
 		}else{
 			throw new Exception("Format not supported !");
 		}
         alSourcei(source, AL_BUFFER, buffer);
         checkALError();
+        int size = alGetBufferi(buffer,AL_SIZE);
+		int bits = alGetBufferi(buffer, AL_BITS);
+		int channels = alGetBufferi(buffer, AL_CHANNELS);
+		int freq = alGetBufferi(buffer, AL_FREQUENCY);
+        System.out.println(fileName + " loaded !" + " | TIME : " + (size/channels/(bits/8)/freq) + "s | BITS : " + bits + " | CHANNELS : " + channels + " | FREQUENCE : " + freq + " FORMAT : " + format);
+	}
+	
+	public void loadWavFormat() throws FileNotFoundException{
+		WaveData soundData = WaveData.create(new BufferedInputStream(new FileInputStream(fileName)));
+		buffer = alGenBuffers();
+		source = alGenSources();
+        alBufferData(buffer, soundData.format, soundData.data, soundData.samplerate);
+        soundData.dispose();
 	}
 	
 	public void loadOGGFormat(){
@@ -93,9 +111,8 @@ public class Audio {
 			if ( file.isFile() ) {
 				FileInputStream fis = new FileInputStream(file);
 				FileChannel fc = fis.getChannel();
-				
 				buff = BufferUtils.createByteBuffer((int)fc.size() + 1);
-
+				
 				while ( fc.read(buff) != -1 ) ;
 				
 				fis.close();
@@ -123,7 +140,7 @@ public class Audio {
 		stb_vorbis_seek_start(decoder);
 		int lengthSamples = stb_vorbis_stream_length_in_samples(decoder);
 
-		ByteBuffer pcm = BufferUtils.createByteBuffer(lengthSamples * channels);
+		ByteBuffer pcm = BufferUtils.createByteBuffer(lengthSamples * 2 * channels);
 
 		stb_vorbis_get_samples_short_interleaved(decoder, channels, pcm, lengthSamples);
 		float duration = stb_vorbis_stream_length_in_seconds(decoder);
@@ -155,7 +172,6 @@ public class Audio {
 		int bits = alGetBufferi(buffer, AL_BITS);
 		int channels = alGetBufferi(buffer, AL_CHANNELS);
 		int freq = alGetBufferi(buffer, AL_FREQUENCY);
-		System.out.println("SIZE : " + size + " | BITS : " + bits + " | CHANNELS : " + channels + " | FREQUENCE : " + freq);
 		return size/channels/(bits/8)/freq;
 	}
 	

@@ -48,7 +48,6 @@ public class GameEngine {
 		Display.setMouseGrabbed(true);
 		try {
 			a = new Audio("res/audio/test.ogg");
-			System.err.println(a.getDurationInSeconds());
 			a.playSound();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -85,7 +84,6 @@ public class GameEngine {
 			
 			if(Timer.getMillisTime("info") >= 1000){
 				Display.setTitle(TITLE + " | Fps:" + FPS + " Ticks:" + TICKS + " | " + camera.getPos() + " " + camera.getRot());
-				System.out.println(a.getPosition());
 				FPS = 0;
 				TICKS = 0;
 				Timer.setValue("info", Timer.getNanoTime("info") - 1000000000);
