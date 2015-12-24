@@ -1,5 +1,7 @@
 package mrdev023.math;
 
+import static org.lwjgl.opengl.GL11.*;
+
 public class Color4f {
 	
 	public static final Color4f 
@@ -64,6 +66,12 @@ public class Color4f {
 		this.a = a;
 	}
 	
+	public void bind(){
+		glColor4f(r,g,b,a);
+	}
 	
+	public void unbind(){
+		BLACK.bind();
+	}
 	
 }

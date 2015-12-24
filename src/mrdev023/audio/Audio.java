@@ -11,13 +11,12 @@ import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 
+import javax.sound.sampled.*;
+
 import org.lwjgl.*;
+import org.lwjgl.openal.*;
 
-import static org.lwjgl.BufferUtils.*;
 
-import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.openal.ALContext;
-import org.lwjgl.openal.ALDevice;
 import org.lwjgl.stb.STBVorbisInfo;
 
 public class Audio {
@@ -44,6 +43,7 @@ public class Audio {
 		if ( device == null )
 			throw new IllegalStateException("Failed to open the default device.");
 		caps = device.getCapabilities();
+		System.out.println("---------------------------- Create Audio Device -------------------------------------");
 		System.out.println("OpenALC10: " + caps.OpenALC10);
 		System.out.println("OpenALC11: " + caps.OpenALC11);
 		System.out.println("caps.ALC_EXT_EFX = " + caps.ALC_EXT_EFX);
@@ -58,6 +58,7 @@ public class Audio {
 		System.out.println("ALC_SYNC: " + (alcGetInteger(device.address(), ALC_SYNC) == ALC_TRUE));
 		System.out.println("ALC_MONO_SOURCES: " + alcGetInteger(device.address(), ALC_MONO_SOURCES));
 		System.out.println("ALC_STEREO_SOURCES: " + alcGetInteger(device.address(), ALC_STEREO_SOURCES));
+		System.out.println("---------------------------------------------------------------------------------------");
 	}
 	
 	public static void destroy(){
@@ -93,12 +94,64 @@ public class Audio {
         System.out.println(fileName + " loaded !" + " | TIME : " + (size/channels/(bits/8)/freq) + "s | BITS : " + bits + " | CHANNELS : " + channels + " | FREQUENCE : " + freq + " FORMAT : " + format);
 	}
 	
-	public void loadWavFormat() throws FileNotFoundException{
-		WaveData soundData = WaveData.create(new BufferedInputStream(new FileInputStream(fileName)));
-		buffer = alGenBuffers();
-		source = alGenSources();
-        alBufferData(buffer, soundData.format, soundData.data, soundData.samplerate);
-        soundData.dispose();
+	public void loadWavFormat() throws Exception{
+		AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(fileName)));
+		AudioFormat audioformat = ais.getFormat();
+
+		// get channels
+		int channels = 0;
+		if (audioformat.getChannels() == 1) {
+			if (audioformat.getSampleSizeInBits() == 8) {
+				channels = AL10.AL_FORMAT_MONO8;
+			} else if (audioformat.getSampleSizeInBits() == 16) {
+				channels = AL10.AL_FORMAT_MONO16;
+			} else {
+				assert false : "Illegal sample size";
+			}
+		} else if (audioformat.getChannels() == 2) {
+			if (audioformat.getSampleSizeInBits() == 8) {
+				channels = AL10.AL_FORMAT_STEREO8;
+			} else if (audioformat.getSampleSizeInBits() == 16) {
+				channels = AL10.AL_FORMAT_STEREO16;
+			} else {
+				assert false : "Illegal sample size";
+			}
+		} else {
+			assert false : "Only mono or stereo is supported";
+		}
+		
+		int available = ais.available();
+			if(available <= 0) {
+			available = ais.getFormat().getChannels() * (int) ais.getFrameLength() * ais.getFormat().getSampleSizeInBits() / 8;
+		}
+		byte[] buf = new byte[ais.available()];
+		int read = 0, total = 0;
+		while ((read = ais.read(buf, total, buf.length - total)) != -1
+			&& total < buf.length) {
+			total += read;
+		}
+		byte[] audio_bytes = buf;
+		boolean two_bytes_data = audioformat.getSampleSizeInBits() == 16;
+		ByteOrder order = audioformat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN;
+		ByteBuffer dest = ByteBuffer.allocateDirect(audio_bytes.length);
+		dest.order(ByteOrder.nativeOrder());
+		ByteBuffer src = ByteBuffer.wrap(audio_bytes);
+		src.order(order);
+		if (two_bytes_data) {
+			ShortBuffer dest_short = dest.asShortBuffer();
+			ShortBuffer src_short = src.asShortBuffer();
+			while (src_short.hasRemaining())
+				dest_short.put(src_short.get());
+		} else {
+			while (src.hasRemaining())
+				dest.put(src.get());
+		}
+		dest.rewind();
+		
+		this.buffer = alGenBuffers();
+		this.source = alGenSources();
+        alBufferData(this.buffer, channels, dest, (int)audioformat.getSampleRate());
+        dest.clear();
 	}
 	
 	public void loadOGGFormat(){
@@ -143,7 +196,6 @@ public class Audio {
 		ByteBuffer pcm = BufferUtils.createByteBuffer(lengthSamples * 2 * channels);
 
 		stb_vorbis_get_samples_short_interleaved(decoder, channels, pcm, lengthSamples);
-		float duration = stb_vorbis_stream_length_in_seconds(decoder);
 		stb_vorbis_close(decoder);
 		
 		buffer = alGenBuffers();

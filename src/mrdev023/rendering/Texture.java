@@ -13,14 +13,17 @@ import org.lwjgl.*;
 
 public class Texture {
 	
-	public static Texture FLOOR,WOOD;
+	public static Texture FLOOR,WOOD,FONT;
 
 	int width, height;
 	int id;
 	
 	public static void init() {
+		System.out.println("---------------------------- Load Texture --------------------------------------------");
 		FLOOR = Texture.loadTexture("res/textures/floor.jpg");
 		WOOD = Texture.loadTexture("res/textures/wood.jpg");
+		FONT = Texture.loadTexture("res/textures/font.png");
+		System.out.println("--------------------------------------------------------------------------------------");
 	}
 	
 	public Texture(int width,int height,int id){
@@ -38,16 +41,18 @@ public class Texture {
 			
 			image.getRGB(0, 0, width, height, pixels, 0,width);
 			
-			ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-			for(int y = 0; y < width; y++){
-				for(int x = 0; x < height; x++){
-					int i = pixels[x + y * width];//0xAARRGGBB
-					buffer.put((byte) ((i >> 16) & 0xFF));//r
-					buffer.put((byte) ((i >> 8) & 0xFF));//g
-					buffer.put((byte) ((i) & 0xFF));//b
-					buffer.put((byte) ((i >> 24) & 0xFF));//a
-				}
+			int[] data = new int[pixels.length];
+			for (int i = 0; i < data.length; i++) {
+				int a = (pixels[i] & 0xff000000) >> 24;
+				int r = (pixels[i] & 0xff0000) >> 16;
+				int g = (pixels[i] & 0xff00) >> 8;
+				int b = (pixels[i] & 0xff);
+				
+				data[i] = a << 24 | b << 16 | g << 8 | r;
 			}
+			
+			IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+			buffer.put(data);
 			buffer.flip();
 			
 			int id = glGenTextures();
@@ -59,7 +64,7 @@ public class Texture {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 			
 			glBindTexture(GL_TEXTURE_2D, 0);
 			

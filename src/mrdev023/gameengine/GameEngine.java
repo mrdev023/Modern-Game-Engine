@@ -26,10 +26,13 @@ public class GameEngine {
 
 	public static void start(String title,int width,int height){
 		TITLE = title;
+		System.out.println("---------------------------- Create OpenGL Context -----------------------------------");
 		Display.create(title, width, height);
 		Display.createContext();
+		Display.printMonitorsInfo();
+		System.out.println("Window : " + width + "x" + height);
 		System.out.println("OpenGL " + GL11.glGetString(GL11.GL_VERSION));
-		
+		System.out.println("--------------------------------------------------------------------------------------");
 		init();
 		loop();
 	}
@@ -46,13 +49,15 @@ public class GameEngine {
 		Timer.addTimer("ticks");
 		Timer.addTimer("fps");
 		Display.setMouseGrabbed(true);
+		System.out.println("---------------------------- Load Audio File -----------------------------------------");
 		try {
-			a = new Audio("res/audio/test.ogg");
+			a = new Audio("res/audio/test.wav");
 			a.playSound();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("--------------------------------------------------------------------------------------");
 	}
 	
 	public static void loop(){

@@ -8,6 +8,7 @@ import java.awt.*;
 import java.nio.*;
 
 import org.lwjgl.*;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 
 import mrdev023.exception.*;
@@ -101,6 +102,20 @@ public class Display {
 		}else{
 			return false;
 		}
+	}
+	
+	public static void printMonitorsInfo(){
+		PointerBuffer monitors = glfwGetMonitors();
+		GLFWVidMode m;
+		if(monitors == null){
+			System.out.println("No monitor detected !");
+			return;
+		}
+		for(int i = 0;i < monitors.capacity();i++){
+			m = glfwGetVideoMode(monitors.get(i));
+			System.out.println(glfwGetMonitorName(monitors.get(i)) + "(" + i + ") : " + m.width() + "x" + m.height() + ":" + m.refreshRate() + "Hz");
+		}
+		
 	}
 	
 	public static boolean isCloseRequested(){

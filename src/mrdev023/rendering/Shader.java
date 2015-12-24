@@ -12,12 +12,15 @@ public class Shader {
 
 	public int program;
 	public int includeV = 0,includeF = 0;
-	public static Shader MAIN,LIGHT,LIGHT_AMBIENT;
+	public static Shader MAIN,LIGHT,LIGHT_AMBIENT,FONT;
 	
 	public static void init() {
+		System.out.println("---------------------------- Load Shader ---------------------------------------------");
 		MAIN = new Shader("res/shaders/main");
+		FONT = new Shader("res/shaders/font");
 		LIGHT = new Shader("res/shaders/light");
 		LIGHT_AMBIENT = new Shader("res/shaders/light_ambient");
+		System.out.println("--------------------------------------------------------------------------------------");
 	}
 
 	public Shader(String file){

@@ -21,6 +21,7 @@ public class MainMenu extends Game implements IGameState{
 	public int time = 0;
 	public static final float speed = 1.0f;
 	public ArrayList<Light> lights;
+	public TextFont text;
 	
 	public void update() {
 		time+=Timer.getDeltaTime();
@@ -69,10 +70,11 @@ public class MainMenu extends Game implements IGameState{
 		lights.add(new AmbientLight(new Vector3f(100,100,100),Color4f.WHITE,Color4f.mul(Color4f.WHITE,1.0f)));
 		vao = MeshBuilder.createFloor(400, Color4f.WHITE,Texture.FLOOR);
 		cube = MeshBuilder.createCube(100, Color4f.WHITE,Texture.WOOD);
+		text = new TextFont("Test", 10, 10, 16, Color4f.WHITE);
 	}
 
 	public void render2D() {
-
+		text.drawText();
 	}
 
 	public void render3D() {

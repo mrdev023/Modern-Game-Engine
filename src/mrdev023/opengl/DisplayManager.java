@@ -23,6 +23,10 @@ public class DisplayManager {
 		projection.loadIdentity();
 		projection.Ortho2D(0, Display.getDisplayMode().getWidth(), 0, Display.getDisplayMode().getHeight(), 1, -1);
 		Shader.MAIN.uniform("projection", projection);
+		Shader.FONT.uniform("projection", projection);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_TEXTURE_2D);
 	}
 	
 	public static void preRender3D(){
