@@ -55,6 +55,23 @@ public class VAO {
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, 0);
+		
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, 2 * SIZE_OF_FLOAT);
+		
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 4, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, (2 + 3) * SIZE_OF_FLOAT);
+		
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, (2 + 3 + 4) * SIZE_OF_FLOAT);
+		
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+		
 		glBindVertexArray(0);
 		size = data.size();
 	}
@@ -68,11 +85,6 @@ public class VAO {
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
-		
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, 0);
-		glVertexAttribPointer(3, 3, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, 2 * SIZE_OF_FLOAT);
-		glVertexAttribPointer(1, 4, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, (2 + 3) * SIZE_OF_FLOAT);
-		glVertexAttribPointer(2, 2, GL_FLOAT, false, (2 + 3 + 4 + 2) * SIZE_OF_FLOAT, (2 + 3 + 4) * SIZE_OF_FLOAT);
 		
 		glDrawArrays(GL_QUADS, 0, size/(2 + 3 + 4 + 2));
 		

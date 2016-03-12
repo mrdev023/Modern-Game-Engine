@@ -52,7 +52,7 @@ public class GameEngine {
 		System.out.println("---------------------------- Load Audio File -----------------------------------------");
 		try {
 			a = new Audio("res/audio/test.wav");
-			a.playSound();
+//			a.playSound();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,7 +93,6 @@ public class GameEngine {
 				TICKS = 0;
 				Timer.setValue("info", Timer.getNanoTime("info") - 1000000000);
 			}
-			
 		}
 		destroy();
 	}

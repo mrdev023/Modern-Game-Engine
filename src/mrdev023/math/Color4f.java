@@ -27,8 +27,40 @@ public class Color4f {
 	   return new Color4f(a.r * b,a.g * b,a.b * b,a.a * b);
 	}
 	
-	public static Color4f mul (Color4f a, Color4f b){
-	   return new Color4f((a.r + b.r)/2.0f,(a.g + b.g)/2.0f,(a.b + b.b)/2.0f,(a.a + b.a)/2.0f);
+	public static Color4f mul (float o,Color4f... a){
+		float r = 0;
+		float b = 0;
+		float g = 0;
+		float al = 0;
+		for(Color4f c : a){
+			r += c.r;
+			g += c.g;
+			b += c.b;
+			al += c.a;
+		}
+		r /= a.length;
+		g /= a.length;
+		b /= a.length;
+		al /= a.length;
+	   return new Color4f(r * o,g * o,b * o,al * o);
+	}
+	
+	public static Color4f mul (Color4f... a){
+		float r = 0;
+		float b = 0;
+		float g = 0;
+		float al = 0;
+		for(Color4f c : a){
+			r += c.r;
+			g += c.g;
+			b += c.b;
+			al += c.a;
+		}
+		r /= a.length;
+		g /= a.length;
+		b /= a.length;
+		al /= a.length;
+	   return new Color4f(r,g,b,al);
 	}
 	
 	public Color4f() {

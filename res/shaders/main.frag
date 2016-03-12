@@ -10,8 +10,6 @@ uniform vec4 diffuse_light_color;
 uniform vec4 ambient_light;
 
 
-out vec4 frag_color;
-
 void main(){
 	vec3 lightDir;
 	float lightIntensity;
@@ -34,5 +32,5 @@ void main(){
 	// Clamp the final light color.
 	color1 = clamp(color1, 0.0f, 1.0f);
 	
-	frag_color = color1 * texture2D(myTexture,out_coord_texture);
+	gl_FragColor = color1 * texture2D(myTexture,out_coord_texture);
 }

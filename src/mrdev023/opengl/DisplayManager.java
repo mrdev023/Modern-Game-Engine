@@ -37,6 +37,8 @@ public class DisplayManager {
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
+		glEnable (GL_BLEND);
+		glBlendFunc (GL_ONE, GL_ONE);
 	}
 	
 	public static void preRenderGUI(){

@@ -22,13 +22,14 @@ public class Matrix4f {
 		this.m = m;
 	}
 	
-	public void loadIdentity(){
+	public Matrix4f loadIdentity(){
 		m = new float[][]{
 			{1,0,0,0},
 			{0,1,0,0},
 			{0,0,1,0},
 			{0,0,0,1}
 		};
+		return this;
 	}
 	
 	public void rotate(Quaternion q){
@@ -76,7 +77,7 @@ public class Matrix4f {
 		return mat;
 	}
 	
-	public void tranlate(float x,float y,float z){
+	public Matrix4f tranlate(float x,float y,float z){
 		Matrix4f mat = new Matrix4f(new float[][]{
 			{1,0,0,x},
 			{0,1,0,y},
@@ -84,6 +85,7 @@ public class Matrix4f {
 			{0,0,0,1}
 		});
 		m = mul(mat).getM();
+		return this;
 	}
 	
 	public void scale(float x,float y,float z){
