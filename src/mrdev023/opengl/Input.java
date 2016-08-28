@@ -93,8 +93,8 @@ public class Input{
 	}
 	
 	public static void destroy(){
-		mousePos.release();
-		scroll.release();
+		mousePos.free();
+		scroll.free();
 	}
 	
 	public static void scroll(long window, double xoffset, double yoffset) {
