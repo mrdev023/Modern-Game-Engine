@@ -24,7 +24,7 @@
     <!--
       fork="true" seems to be absolutely
       necessary for the setting of java.library.path
-      to be effective. -->
+      to be effective. 
 
     <java fork="true" classname="mrdev023/Main">
       <classpath>
@@ -33,6 +33,6 @@
       </classpath>
       <sysproperty key="java.library.path"
                    value="${lwjgl_natives.dir}"/>
-    </java>
+    </java> -->
   </target>
 </project>
