@@ -26,7 +26,7 @@
       necessary for the setting of java.library.path
       to be effective. -->
 
-    <java fork="true" classname="Simple">
+    <java fork="true" classname="mrdev023/Main">
       <classpath>
         <path refid="my_cp"/>
         <path location="${build.dir}"/>
