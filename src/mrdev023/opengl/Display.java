@@ -92,8 +92,8 @@ public class Display {
 		IntBuffer w = BufferUtils.createIntBuffer(1);
 		IntBuffer h = BufferUtils.createIntBuffer(1);
 		glfwGetWindowSize(window, w, h);
-		int width = w.getInt(0);
-		int height = h.getInt(0);
+		int width = w.get(0);
+		int height = h.get(0);
 		
 		if(Display.getDisplayMode().getWidth() != width || Display.getDisplayMode().getHeight() != height || hasResized){
 			setDisplayMode(new DisplayMode(width, height));
