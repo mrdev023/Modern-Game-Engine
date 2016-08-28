@@ -11,6 +11,8 @@
 	<javac srcdir="src" destdir="bin"/>
 </target>
 
+<target name="test" depends="compile">
+</target>
 
 <target name="jar" depends="compile">
 	<mkdir dir="exe"/>
