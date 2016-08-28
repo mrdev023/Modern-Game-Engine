@@ -89,8 +89,8 @@ public class Display {
 	}
 	
 	public static boolean wasResized(){
-		ByteBuffer w = BufferUtils.createByteBuffer(4);
-		ByteBuffer h = BufferUtils.createByteBuffer(4);
+		IntBuffer w = BufferUtils.createIntBuffer(1);
+		IntBuffer h = BufferUtils.createIntBuffer(1);
 		glfwGetWindowSize(window, w, h);
 		int width = w.getInt(0);
 		int height = h.getInt(0);
@@ -119,7 +119,7 @@ public class Display {
 	}
 	
 	public static boolean isCloseRequested(){
-		return glfwWindowShouldClose(window) == GL_TRUE;
+		return glfwWindowShouldClose(window);
 	}
 	
 	public static void createContext(){
