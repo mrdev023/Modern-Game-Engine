@@ -21,7 +21,7 @@ public class Display {
 	private static boolean hasResized = false;
 	
 	public static void create(String title,int width,int height){
-		if ( glfwInit() != GL11.GL_TRUE )
+		if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 		
 		TITLE = title;
@@ -31,7 +31,7 @@ public class Display {
 	}
 	
 	public static void create(String title,int width,int height,int major,int minor){
-		if ( glfwInit() != GL11.GL_TRUE )
+		if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 		
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major); // Nous voulons OpenGL 3.3 
@@ -57,7 +57,7 @@ public class Display {
 	}
 	
 	public static void create(String title,int width,int height,int major,int minor,int sample){
-		if ( glfwInit() != GL11.GL_TRUE )
+		if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 		
 		glfwWindowHint(GLFW_SAMPLES, sample); // antialiasing 4x 
