@@ -9,7 +9,6 @@
 
   <path id="my_cp">
     <fileset dir="${lwjgl_jars.dir}" includes="lwjgl.jar"/>
-    <fileset dir="${lwjgl_jars.dir}" includes="lwjgl_util.jar"/>
   </path>
 
   <target name="compile">
